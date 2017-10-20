@@ -57,7 +57,22 @@ class LINE extends LineAPI {
             } 
 
         }
+        
+	if(operation.type == 11 && this.stateStatus.qrp == 1) { // ada update
+            // op1 = group nya
+            // op2 = yang 'nge' update
+            if(!isAdminOrBot(operation.param2)) {
+                this._kickMember(operation.param1,[operation.param2]);
+            }
 
+        }
+
+	if(operation.type == 17 && this.stateStatus.kill == 1) { //ada join
+            if(!isAdminOrBot(operation.param2)) {
+                this._kickMember(operation.param1,[operation.param2]);
+            }
+        }
+	    
         if(operation.type == 55){ //ada reader
 
             const idx = this.checkReader.findIndex((v) => {
@@ -206,7 +221,11 @@ class LINE extends LineAPI {
         if(txt == 'halo' || txt == 'sya') {
             this._sendMessage(seq, 'halo disini tasya :)');
         }
-
+ 
+        if(txt == 'restart' && isAdminOrBot(seq.from)) {
+            this._client.removeAllMessages();
+            this._sendMessage(seq,'done');
+        }
         if(txt == 'speed') {
             const curTime = (Date.now() / 1000);
             await this._sendMessage(seq,'processing....');
